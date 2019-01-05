@@ -14,6 +14,8 @@ func run() {
 	setSpace()
 }
 
+// ------以下、ユーティリティ------
+
 var sc = bufio.NewScanner(os.Stdin)
 
 func setSpace() {
