@@ -25,28 +25,29 @@ func run() {
 	dp[0] = []int{as[0], bs[0], cs[0]}
 
 	for i := 1; i < n; i++ {
-		dp[i] = make([]int, 3)
+		prevA, prevB, prevC := dp[i-1][0], dp[i-1][1], dp[i-1][2]
+		dp[i] = []int{0, 0, 0}
+		// if A was selected previous,
+		chMax(&dp[i][1], prevA+bs[i])
+		chMax(&dp[i][2], prevA+cs[i])
 
-		prevA := dp[i-1][0]
-		if bs[i] < cs[i] {
-			dp[i][2] = max(prevA+cs[i], dp[i][2])
-		} else {
-			dp[i][1] = max(prevA+bs[i], dp[i][1])
-		}
-		prevB := dp[i-1][1]
-		if as[i] < cs[i] {
-			dp[i][2] = max(prevB+cs[i], dp[i][2])
-		} else {
-			dp[i][0] = max(prevB+as[i], dp[i][0])
-		}
-		prevC := dp[i-1][2]
-		if as[i] < bs[i] {
-			dp[i][1] = max(prevC+bs[i], dp[i][1])
-		} else {
-			dp[i][0] = max(prevC+as[i], dp[i][0])
-		}
+		// if B was selected previous,
+		chMax(&dp[i][0], prevB+as[i])
+		chMax(&dp[i][2], prevB+cs[i])
+
+		// if C was selected previous
+		chMax(&dp[i][0], prevC+as[i])
+		chMax(&dp[i][1], prevC+bs[i])
 	}
+
 	fmt.Println(max(max(dp[n-1][0], dp[n-1][1]), dp[n-1][2]))
+}
+
+func chMax(a *int, b int) {
+	if *a > b {
+		return
+	}
+	*a = b
 }
 
 func max(a, b int) int {
